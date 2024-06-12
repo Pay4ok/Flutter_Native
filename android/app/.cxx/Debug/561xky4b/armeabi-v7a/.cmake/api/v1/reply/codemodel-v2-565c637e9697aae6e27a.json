@@ -38,7 +38,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "native-lib::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-native-lib-Debug-06748afaeed99d16f2c4.json",
+					"jsonFile" : "target-native-lib-Debug-c4112f36e93e16a85e33.json",
 					"name" : "native-lib",
 					"projectIndex" : 0
 				}
@@ -48,7 +48,7 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "D:/Flutter_Native/android/app/.cxx/Debug/561xky4b/x86_64",
+		"build" : "D:/Flutter_Native/android/app/.cxx/Debug/561xky4b/armeabi-v7a",
 		"source" : "D:/Flutter_Native/android/app/src/main/cpp"
 	},
 	"version" : 

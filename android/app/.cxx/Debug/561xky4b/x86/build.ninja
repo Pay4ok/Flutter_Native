@@ -58,10 +58,10 @@ build CMakeFiles/native-lib.dir/func.c.o: C_COMPILER__native-lib_Debug D$:/Flutt
 #############################################
 # Link the shared library D:\Flutter_Native\build\app\intermediates\cxx\Debug\561xky4b\obj\x86\libnative-lib.so
 
-build D$:/Flutter_Native/build/app/intermediates/cxx/Debug/561xky4b/obj/x86/libnative-lib.so: C_SHARED_LIBRARY_LINKER__native-lib_Debug CMakeFiles/native-lib.dir/func.c.o
+build D$:/Flutter_Native/build/app/intermediates/cxx/Debug/561xky4b/obj/x86/libnative-lib.so: C_SHARED_LIBRARY_LINKER__native-lib_Debug CMakeFiles/native-lib.dir/func.c.o | C$:/Users/Pay4ok/AppData/Local/Android/Sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/i686-linux-android/19/liblog.so
   LANGUAGE_COMPILE_FLAGS = -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mstackrealign -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -fno-limit-debug-info
   LINK_FLAGS = -static-libstdc++ -Wl,--build-id=sha1 -Wl,--no-rosegment -Wl,--fatal-warnings -Wl,--no-undefined -Qunused-arguments
-  LINK_LIBRARIES = -llog  -latomic -lm
+  LINK_LIBRARIES = -llog  -llog  -latomic -lm
   OBJECT_DIR = CMakeFiles\native-lib.dir
   POST_BUILD = cd .
   PRE_LINK = cd .

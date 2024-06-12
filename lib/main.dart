@@ -5,8 +5,8 @@ import 'package:ffi/ffi.dart';
 import 'package:flutter/material.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
-typedef Sha256Func = Void Function(Pointer<Double>, Int32, Pointer<Uint32>);
-typedef Sha256 = void Function(Pointer<Double>, int, Pointer<Uint32>);
+typedef Sha256Func = Void Function(Pointer<Double>, Int32, Pointer<Uint8>);
+typedef Sha256 = void Function(Pointer<Double>, int, Pointer<Uint8>);
 
 void main() {
   runApp(MyApp());
@@ -71,13 +71,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _calculateSha256() {
     if (!isHashCalculated) {
-      final hashBytesPtr = calloc<Uint32>(32);
+      final hashBytesPtr = calloc<Uint8>(32);
 
       final entropyPtr = entropy.toNativeDoubleArray();
+      print(entropy);
       sha256(entropyPtr, entropy.length, hashBytesPtr);
 
       final hash = hashBytesPtr.asTypedList(32);
-
+      
+      print(hash);
       sha256Hash = hash.map((byte) => byte.toRadixString(16).padLeft(2, '0')).join('');
 
       calloc.free(hashBytesPtr);
@@ -85,6 +87,29 @@ class _MyHomePageState extends State<MyHomePage> {
 
       setState(() {
         isHashCalculated = true;
+      });
+    }
+  }
+
+  void _handleGyroscopeEvent(AccelerometerEvent event) {
+    if (_progressValue < 1.0) {
+      setState(() {
+        _gyroscopeValues = <double>[event.x, event.y, event.z];
+        if (event.x > 5 && !gyrosFlag) {
+          gyrosFlag = true;
+          //_progressValue += 0.015625; // if we want to collect 64 values
+          _progressValue += 0.05;
+          entropy.add(double.parse(event.x.toStringAsFixed(6)));
+        } else if (event.x < 0 && gyrosFlag) {
+          gyrosFlag = false;
+          _progressValue += 0.05;
+          //_progressValue += 0.015625; // if we want to collect 64 values
+          entropy.add(double.parse(event.x.toStringAsFixed(6)));
+        }
+        _progressValue = _progressValue.clamp(0.0, 1.0);
+        if (_progressValue == 1.0 && !isHashCalculated) {
+          _calculateSha256();
+        }
       });
     }
   }
@@ -112,27 +137,10 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: _isButtonBlocked
                 ? _resetState
                 : () {
-              _streamSubscriptions.add(
-                accelerometerEvents.listen((AccelerometerEvent event) {
-                  setState(() {
-                    _isButtonBlocked = true;
-                    _gyroscopeValues = <double>[event.x, event.y, event.z];
-                    if (event.x > 5 && !gyrosFlag) {
-                      gyrosFlag = true;
-                      _progressValue += 0.05;
-                      entropy.add(double.parse(event.x.toStringAsFixed(6)));
-                    } else if (event.x < 0 && gyrosFlag) {
-                      gyrosFlag = false;
-                      _progressValue += 0.05;
-                      entropy.add(double.parse(event.x.toStringAsFixed(6)));
-                    }
-                    _progressValue = _progressValue.clamp(0.0, 1.0);
-                    if (_progressValue == 1.0 && !isHashCalculated) {
-                      _calculateSha256();
-                    }
-                  });
-                }),
-              );
+              _streamSubscriptions.add(accelerometerEvents.listen(_handleGyroscopeEvent));
+              setState(() {
+                _isButtonBlocked = true;
+              });
             },
             child: Text(
               _progressValue == 1.0 ? 'Restart' : 'Get Gyroscope Values',

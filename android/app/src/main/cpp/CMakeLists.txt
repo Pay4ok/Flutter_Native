@@ -12,4 +12,13 @@ add_library(
 target_link_libraries(
         native-lib
         log
+        ${log-lib}
 )
+
+find_library( # Defines the name of the path variable that stores the
+        # location of the NDK library.
+        log-lib
+
+        # Specifies the name of the NDK library that
+        # CMake needs to locate.
+        log )

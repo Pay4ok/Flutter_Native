@@ -77,6 +77,10 @@
 				"role" : "libraries"
 			},
 			{
+				"fragment" : "-llog",
+				"role" : "libraries"
+			},
+			{
 				"fragment" : "-latomic -lm",
 				"role" : "libraries"
 			}
